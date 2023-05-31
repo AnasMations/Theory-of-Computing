@@ -147,9 +147,9 @@ def eliminate_useless_productions(cfg):
     for key, list in cnf.items():
         for prod in list:
             for char in prod:
-                if char.isupper() and char not in list_of_non_terminals:
+                if char.isupper() and char not in list_of_non_terminals and char != key:
                     list_of_non_terminals.append(char)
-    
+    #print(list_of_non_terminals)
     for key, list in cfg.items():
         if key not in list_of_non_terminals and 'S' not in key:
             del cnf[key]
@@ -174,6 +174,9 @@ def convert_to_cnf(cfg):
         for production in productions:
             modified_production = ""
             for char in production:
+                if len(production)==1 and production.islower():
+                    modified_production += char
+                    continue
                 if char.islower() and char != 'e':
                     temp_non_terminal = None
                     # Check if the lowercase character is already in the values of cnf
@@ -235,9 +238,14 @@ CFG_test = {'S': ['ASB', 'a'],
        'A': ['aAS', 'a', 'e'],
        'B': ['SbS', 'A', 'bb']}
 
-CFG_test = {'S': ['ABA'], 'A': ['aA', 'e'], 'B': ['bBc', 'e']}
+#CFG_test = {'S': ['ABA'], 'A': ['aA', 'e'], 'B': ['bBc', 'e']}
 
-CFG_test = {'S': ['a', 'aA', 'B'], 'A': ['aBB', 'e'], 'B': ['Aa', 'b']}
+#CFG_test = {'S': ['a', 'aA', 'B'], 'A': ['aBB', 'e'], 'B': ['Aa', 'b']}
+
+CFG_test = {'S': ['a','aA','B'],
+            'A': ['aBB','e'],
+            'B': ['Aa','b'],
+            'C': ['ba','bC']}
 
 print("---------------------------------------")
 print("Starting CFG:")
